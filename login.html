@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Social Shield AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#05070a] text-white h-screen flex items-center justify-center p-6">
+    <div class="fixed inset-0 z-[-1] bg-[radial-gradient(circle_at_30%_30%,rgba(188,19,254,0.1),transparent_50%)]"></div>
+
+    <div class="glass w-full max-w-md p-10 space-y-8 neon-border transition-all">
+        <div class="text-center">
+            <div class="flex justify-center mb-4">
+                <i data-lucide="shield-check" class="text-cyan-400 w-12 h-12"></i>
+            </div>
+            <h2 class="text-3xl font-bold tracking-tighter">SECURE LOGIN</h2>
+            <p class="text-gray-400 mt-2">Access the Neural Detection Command</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Neural Identity (Email)</label>
+                <input type="email" id="email" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-400 transition" placeholder="admin@socialshield.ai">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Access Key (Password)</label>
+                <input type="password" id="password" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-cyan-400 transition" placeholder="••••••••">
+            </div>
+            <button type="submit" class="w-full bg-cyan-500 text-black font-bold py-3 rounded-xl hover:bg-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] transition transform hover:scale-[1.02]">
+                AUTHENTICATE
+            </button>
+        </form>
+
+        <div class="text-center text-sm">
+            <span class="text-gray-500">New Agent?</span>
+            <a href="signup.html" class="text-cyan-400 hover:underline ml-1">Create Identity</a>
+        </div>
+    </div>
+
+    <script type="module" src="auth.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "social_media_anomely_detection-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "anomelydetection.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo \"Static site with serverless API ready for deployment\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
+    "dotenv": "^16.3.1",
+    "firebase": "^12.13.0",
+    "googleapis": "^131.0.0",
+    "ml-isolation-forest": "^0.1.0",
+    "ml-random-forest": "^2.1.0",
+    "sentiment": "^5.0.2"
+  }
+}
