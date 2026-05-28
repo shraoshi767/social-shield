@@ -550,17 +550,24 @@ function extractHashtagStats(videos) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'POST required' });
+  // Allow GET for the auto-trending load on dashboard mount
+  const isGet = req.method === 'GET';
+  const isPost = req.method === 'POST';
+
+  if (!isGet && !isPost) {
+    return res.status(405).json({ error: 'GET or POST required' });
   }
 
-  const body = req.body || (await new Promise((resolve) => {
-    let raw = '';
-    req.on('data', (chunk) => { raw += chunk; });
-    req.on('end', () => resolve(JSON.parse(raw || '{}')));
-  }));
+  let query = 'trending';
 
-  const query = (body.query || '').trim();
+  if (isPost) {
+    const body = req.body || (await new Promise((resolve) => {
+      let raw = '';
+      req.on('data', (chunk) => { raw += chunk; });
+      req.on('end', () => resolve(JSON.parse(raw || '{}')));
+    }));
+    query = (body.query || 'trending').trim();
+  }
 
   try {
     const videoIds = await searchVideoIds(query);
@@ -580,15 +587,29 @@ export default async function handler(req, res) {
     const avgRisk = Math.round(sortedVideos.reduce((sum, video) => sum + video.riskScore, 0) / sortedVideos.length);
     const composition = summarizeComposition(sortedVideos);
     const trendData = sortedVideos.slice(0, 6).map((item) => item.riskScore);
+    const topVideo = sortedVideos[0];
 
     return res.status(200).json({
       query,
       anomalyCount,
       avgRisk: `${avgRisk}%`,
       threatVelocity: describeVelocity(sortedVideos),
-      topReason: sortedVideos[0]?.primaryReasonHuman || sortedVideos[0]?.reasons[0] || 'Realtime anomaly detection',
-      topReasonTech: sortedVideos[0]?.primaryReasonTech || 'No technical reasoning available',
-      topReasonHuman: sortedVideos[0]?.primaryReasonHuman || 'No human-friendly reason available',
+      topReason: topVideo?.primaryReasonHuman || topVideo?.reasons[0] || 'Realtime anomaly detection',
+      topReasonTech: topVideo?.primaryReasonTech || 'No technical reasoning available',
+      topReasonHuman: topVideo?.primaryReasonHuman || 'No human-friendly reason available',
+      trendingVideo: topVideo ? {
+        id: topVideo.id,
+        title: topVideo.title,
+        videoUrl: topVideo.videoUrl,
+        viewCount: topVideo.viewCount,
+        likeCount: topVideo.likeCount,
+        riskScore: topVideo.riskScore,
+        level: topVideo.level,
+        sentimentLabel: topVideo.sentimentLabel,
+        primaryReasonHuman: topVideo.primaryReasonHuman,
+        primaryReasonTech: topVideo.primaryReasonTech,
+        spamPercent: topVideo.spamPercent
+      } : null,
       trendingHashtags: extractHashtagStats(sortedVideos),
       trendingVideos: sortedVideos.slice(0, 4).map((video) => ({
         title: video.title,
