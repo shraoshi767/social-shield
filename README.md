@@ -34,7 +34,3 @@ Open `http://localhost:3000` in your browser and use the login/signup pages. The
 
 4. link: https://socialmediaanomelydetection-3.vercel.app/
 
-## Notes
-- Firebase config is already wired into `firebase.js`.
-- The app expects a local server or Vercel, not a file:// browser load.
-- If you want, I can add support for Netlify functions next.
